@@ -1,0 +1,47 @@
+<div class="row no-gutters justify-content-center">
+  <section class="container container-template">
+
+    <!--#region Table-->
+    <ng-container *ngIf=" (data$ | async) as skills; else elseError">
+
+      <app-table [headers]="headers"
+                 [rows]="skills"
+                 [allActions]="true"
+                 keyExpr="id"
+                 (onEditingStart)="onEditRow($event.rowData)"
+                 (onDeleteStart)="onDelete($event)">
+        <div class="toolbar-right">
+          <pichincha-button (click)="onEditRow()"
+                            class="w-100"
+                            size="large"
+                            id="button"
+                            color="primary">
+            <pichincha-icon
+              class="mr-2"
+              size="20px"
+              color="error"
+              weight_color="900"
+              type="--outlined">
+              add
+            </pichincha-icon>
+            Agregar nueva habilidad
+          </pichincha-button>
+        </div>
+      </app-table>
+
+    </ng-container>
+    <!--#endregion-->
+
+    <!--#region Else error table-->
+    <ng-template #elseError>
+      <div class="d-flex align-items-center justify-content-center mt-3">
+        <app-error [controlSpiner]="showSpinner">
+        </app-error>
+      </div>
+    </ng-template>
+    <!--#endregion-->
+
+  </section>
+</div>
+
+

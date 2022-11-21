@@ -1,0 +1,118 @@
+<ng-container>
+
+  <!--#region MessageBar -->
+  <div class="row">
+    <div class="col">
+      <pichincha-message-bar idElement="msg-person-skills"
+                             class="mb-2"
+                             open="{{showMessageBar}}"
+                             (closeMessage)="showMessageBar=false"
+                             variant="normal"
+                             adjust-in="true"
+                             status="info">
+        Debe seleccionar un perfil
+      </pichincha-message-bar>
+    </div>
+  </div>
+  <!--#endregion -->
+
+  <!--#region Filter - Add Button-->
+  <div class="row justify-content-between align-items-center mb-3">
+    <div class="col-lg-4">
+      <pichincha-input ngDefaultControl
+                       [(ngModel)]="searchNameSkill"
+                       full-width="true"
+                       type="text"
+                       placeholder="Buscar"
+                       max-length="21">
+      </pichincha-input>
+    </div>
+
+    <div class="col-lg-4">
+      <pichincha-button
+        type="text"
+        color="primary"
+        (click)="onAddPersonSkill()">
+        <pichincha-icon
+          class="mr-2"
+          size="18px"
+          color="error"
+          weight_color="900"
+          type="--outlined">
+          add
+        </pichincha-icon>
+        Agregar
+      </pichincha-button>
+    </div>
+  </div>
+  <!--#endregion-->
+
+  <!--#region Table-->
+  <ng-container>
+
+    <div class="dt-responsive mb-3">
+      <table aria-describedby="table-person-skills"
+             class="pichincha-table">
+        <thead>
+        <tr>
+          <th *ngFor="let column of columns"
+              class="pichincha-table-header">
+            <pichincha-typography variant="bodyText"
+                                  color="grey"
+                                  weight="bold"
+                                  weight_color="500"
+                                  align="inherit">
+              {{column.caption}}
+            </pichincha-typography>
+          </th>
+        </tr>
+        </thead>
+
+        <tbody *ngIf="personSkills;">
+        <pichincha-typography *ngIf="personSkills.length === 0; else totalElements"
+                              class="text-truncate ml-2 mt-3"
+                              variant="bodyText"
+                              color="blue"
+                              weight="normal"
+                              weight_color="500"
+                              align="inherit">
+          No hay habilidades registradas
+        </pichincha-typography>
+        <ng-template #totalElements>
+          <tr *ngFor="let skills of personSkills | filterSkill: searchNameSkill : searchTypeSkills"
+              class="border-bottom">
+            <td>
+              {{skills.typeSkill}}
+            </td>
+            <td>
+              {{skills.nameSkill}}
+            </td>
+            <td>
+              <div class="d-flex align-items-center">
+                <button class="btn-pichincha md-secondary only-icon sz-small"
+                        type="button"
+                        (click)="onDeletePersonSkill(skills)">
+                  <pichincha-icon
+                    size="20px"
+                    color="black"
+                    weight_color="500"
+                    type="--round">
+                    delete
+                  </pichincha-icon>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-footer-results">
+      {{personSkills?.length}} Resultados
+    </div>
+
+  </ng-container>
+  <!--#endregion-->
+
+</ng-container>

@@ -1,0 +1,486 @@
+<div class="row no-gutters ">
+  <section class="section-form container container-template">
+
+    <pichincha-message-bar
+      id-element="msg-person-message"
+      (closeMessage)="msgError=false"
+      open="{{msgError}}"
+      variant="light"
+      status="error"
+      adjust-in="true"
+      allow-close="true"
+      auto-close="3000">
+      Asegúrate de llenar los campos obligatorios
+    </pichincha-message-bar>
+
+
+    <ng-container *ngIf="personFormGroup">
+      <form id="userForm"
+            class="w-100 p-4"
+            [formGroup]="personFormGroup"
+            (reset)="redirectTo(true, this.isEdit)"
+            (ngSubmit)="onSubmitForm()">
+
+        <!--#region Informacion Básica -->
+        <section>
+          <pichincha-typography class="col mt-4 mb-3"
+                                variant="h4"
+                                color="darkGrey"
+                                weight="normal"
+                                weight_color="500"
+                                align="inherit">
+            Información Básica
+          </pichincha-typography>
+          <hr class="row col">
+
+          <!--#region Nombres y Apellidos-->
+          <div class="row m-0">
+            <div class="col-md col-form text-truncate">
+              <app-custom-input
+                id="inputName"
+                type="text"
+                ngDefaultControl
+                formControlName="name"
+                label="Nombres *"
+                [maxLength]=30
+                placeholder="Ej: David Juan"
+                styleClass="text-uppercase">
+              </app-custom-input>
+              <div class="col-errors-name"
+                   *ngIf="name?.invalid && (name?.dirty || name?.touched)">
+                <pichincha-typography
+                  class="text-error"
+                  *ngIf="!!name?.errors?.['required']"
+                  variant="tinyText"
+                  color="error"
+                  weight="normal"
+                  weight_color="500"
+                  align="inherit"
+                >
+                  Nombre es requerido.
+                </pichincha-typography>
+                <pichincha-typography
+                  class="text-error"
+                  *ngIf="!!name?.errors?.['minlength']"
+                  variant="tinyText"
+                  color="error"
+                  weight="normal"
+                  weight_color="500"
+                  align="inherit"
+                >
+                  Nombre debe tener al menos 3 caracteres.
+                </pichincha-typography>
+                <pichincha-typography
+                  class="text-error"
+                  *ngIf="!!name?.errors?.['maxlength']"
+                  variant="tinyText"
+                  color="error"
+                  weight="normal"
+                  weight_color="500"
+                  align="inherit"
+                >
+                  Nombre debe tener un máximo de 30 caracteres.
+                </pichincha-typography>
+              </div>
+            </div>
+            <div class="col-md col-form text-truncate">
+              <app-custom-input
+                id="inputLastName"
+                type="text"
+                ngDefaultControl
+                formControlName="lastName"
+                label="Apellidos *"
+                [maxLength]=30
+                placeholder="Ej: Litardo Veloz"
+                styleClass="text-uppercase">
+              </app-custom-input>
+
+              <div class="errors"
+                   *ngIf="lastName?.invalid && (lastName?.dirty || lastName?.touched)">
+                <pichincha-typography
+                  class="text-error"
+                  *ngIf="!!lastName?.errors?.['required']"
+                  variant="tinyText"
+                  color="error"
+                  weight="normal"
+                  weight_color="500"
+                  align="inherit"
+                >
+                  Apellido es requerido.
+                </pichincha-typography>
+                <pichincha-typography
+                  class="text-error"
+                  *ngIf="!!lastName?.errors?.['minlength']"
+                  variant="tinyText"
+                  color="error"
+                  weight="normal"
+                  weight_color="500"
+                  align="inherit"
+                >
+                  Apellido debe tener al menos 3 caracteres.
+                </pichincha-typography>
+                <pichincha-typography
+                  class="text-error"
+                  *ngIf="!!lastName?.errors?.['maxlength']"
+                  variant="tinyText"
+                  color="error"
+                  weight="normal"
+                  weight_color="500"
+                  align="inherit"
+                >
+                  Apellido debe tener un máximo de 30 caracteres.
+                </pichincha-typography>
+              </div>
+
+            </div>
+          </div>
+          <!--#endregion-->
+
+          <!--#region Email - Phone -->
+          <div class="row" style="margin: 0">
+            <div class="col-md col-form text-truncate">
+              <app-custom-input
+                type="text"
+                ngDefaultControl
+                formControlName="email"
+                placeholder="Ej: email@domain.com"
+                label="Correo electrónico *"
+                [maxLength]=50>
+              </app-custom-input>
+
+              <div class="errors"
+                   *ngIf="email?.invalid && (email?.dirty || email?.touched)">
+                <pichincha-typography
+                  class="text-error"
+                  *ngIf="!!email?.errors?.['required']"
+                  variant="tinyText"
+                  color="error"
+                  weight="normal"
+                  weight_color="500"
+                  align="inherit"
+                >
+                  Email es requerido.
+                </pichincha-typography>
+                <pichincha-typography
+                  class="text-error"
+                  *ngIf="!!email?.errors?.['email']"
+                  variant="tinyText"
+                  color="error"
+                  weight="normal"
+                  weight_color="500"
+                  align="inherit"
+                >
+                  Email incorrecto.
+                </pichincha-typography>
+                <pichincha-typography
+                  class="text-error"
+                  *ngIf="!!email?.errors?.['maxlength']"
+                  variant="tinyText"
+                  color="error"
+                  weight="normal"
+                  weight_color="500"
+                  align="inherit"
+                >
+                  Debe ingresar un máximo de 50 caracteres.
+                </pichincha-typography>
+                <pichincha-typography
+                  class="text-error"
+                  *ngIf="!!email?.errors?.['validatemail']"
+                  variant="tinyText"
+                  color="error"
+                  weight="normal"
+                  weight_color="500"
+                  align="inherit"
+                >
+                  {{email?.errors?.['validatemail']}}
+                </pichincha-typography>
+              </div>
+            </div>
+            <div class="col-md ">
+              <pichincha-input
+                filter-regex="[^0-9]"
+                id="inputPhoneNumber"
+                label="Número de teléfono"
+                appInputAccessor
+                full-width="true"
+                formControlName="phoneNumber"
+                type="text"
+                placeholder="Ej: 0991234567"
+                idElement="inputPhoneNumber"
+                max-length=15>
+              </pichincha-input>
+            </div>
+          </div>
+          <!--#endregion-->
+
+          <!--#region Pais-->
+          <div class="row m-0">
+            <app-p-select formControlName="codeCountry"
+                          class="col-md"
+                          [items]="listCountry$ | async"
+                          label="País *"
+                          valueExpr="code"
+                          displayExpr="description"
+                          [search]="true"
+                          [errorHelper]=" $any( codeCountry?.invalid && (codeCountry?.dirty || codeCountry?.touched)? 'El país es requerido.' : null ) "
+                          [state]=" $any( codeCountry?.invalid && (codeCountry?.dirty || codeCountry?.touched)? 'error' : 'normal' ) "
+                          ngDefaultControl
+            ></app-p-select>
+          </div>
+          <!--#endregion-->
+
+        </section>
+        <!--#endregion-->
+
+        <!--#region Detalle Staffing -->
+        <section>
+          <pichincha-typography class="col mt-4 mb-3"
+                                variant="h4"
+                                color="darkGrey"
+                                weight="normal"
+                                weight_color="500"
+                                align="inherit">
+            Detalle
+          </pichincha-typography>
+          <hr>
+
+
+          <!--#region Role - Ultimatix -->
+          <div class="row m-0">
+            <div class="col-6 col-sm col-md-6">
+              <pichincha-typography
+                class="text-truncate mt-1 mb-3"
+                variant="smallText"
+                color="darkGrey"
+                weight="normal"
+                weight_color="500"
+                align="inherit">
+                Rol *
+              </pichincha-typography>
+
+              <div class="row ">
+                <label class="col-md d-flex align-items-center mb-0"
+                       *ngFor="let item of listRole$ | async">
+                  <input formControlName="role"
+                         type="radio"
+                         value="{{item}}"
+                         id="{{item}}">
+                  <pichincha-typography
+                    class="text-truncate ml-2"
+                    variant="bodyText"
+                    color="gray"
+                    weight="normal"
+                    weight_color="500"
+                    align="inherit">
+                    {{item}}
+                  </pichincha-typography>
+                </label>
+              </div>
+
+              <div class="errors"
+                   *ngIf="role?.invalid && (role?.dirty || role?.touched)">
+                <pichincha-typography
+                  class="text-error"
+                  *ngIf="!!role?.errors?.['required']"
+                  variant="tinyText"
+                  color="error"
+                  weight="normal"
+                  weight_color="500"
+                  align="inherit">
+                  Rol es requerido.
+                </pichincha-typography>
+              </div>
+            </div>
+          </div>
+          <!--#endregion -->
+
+
+          <!--#region Proveedor - Seniority-->
+          <div class="row m-0">
+            <app-p-select formControlName="idProvider"
+                          class="col-md"
+                          [items]="listProviders$ | async"
+                          valueExpr="id"
+                          displayExpr="providerName"
+                          label="Proveedor *"
+                          [errorHelper]="$any(providerTo?.invalid && (providerTo?.dirty || providerTo?.touched) ?'El proveedor es requerido.': null)"
+                          [state]="$any(providerTo?.invalid && (providerTo?.dirty || providerTo?.touched) ? 'error': 'normal')"
+                          ngDefaultControl
+            ></app-p-select>
+            <app-p-select formControlName="idSeniority"
+                          class="col-md"
+                          [items]="listSeniority$ | async"
+                          label="Seniority *"
+                          valueExpr="id"
+                          displayExpr="seniorityName"
+                          [errorHelper]="$any(seniorityTo?.invalid && (seniorityTo?.dirty || seniorityTo?.touched)? 'El campo seniority es requerido.':null)"
+                          [state]="$any(seniorityTo?.invalid && (seniorityTo?.dirty || seniorityTo?.touched)? 'error': 'normal')"
+                          ngDefaultControl
+            ></app-p-select>
+          </div>
+          <!--#endregion-->
+
+          <!--#region Perfil - Chapter -->
+          <div class="row m-0">
+            <div class="col-md">
+
+              <app-p-select [items]="listProfile$ | async"
+                            ngDefaultControl
+                            formControlName="idProfile"
+                            label="Perfil *"
+                            valueExpr="id"
+                            displayExpr="nameProfile"
+                            [errorHelper]="$any(profileTo?.invalid && (profileTo?.dirty || profileTo?.touched)? 'El campo perfil es requerido.':null)"
+                            [state]="$any(profileTo?.invalid && (profileTo?.dirty || profileTo?.touched)? 'error': 'normal')"
+                            placeholder="Ej. Dev Front"
+              ></app-p-select>
+
+            </div>
+            <div class="col-md">
+              <app-p-select [items]="listChapter$ | async"
+                            ngDefaultControl
+                            formControlName="idChapter"
+                            label="Chapter *"
+                            valueExpr="id"
+                            displayExpr="chapterName"
+                            [errorHelper]="$any(chapterTo?.invalid && (chapterTo?.dirty || chapterTo?.touched)? 'El campo chapter es requerido.':null)"
+                            [state]="$any(chapterTo?.invalid && (chapterTo?.dirty || chapterTo?.touched)? 'error': 'normal')"
+                            placeholder="Ej. Chapter QA"
+              ></app-p-select>
+            </div>
+          </div>
+          <!--#endregion -->
+
+          <!--#region Fecha Ingreso -->
+          <div class="row m-0">
+            <div class="col-md col-form text-truncate">
+              <pichincha-input id="inputUltimatix"
+                               type="text"
+                               appInputAccessor
+                               formControlName="ultimatix"
+                               placeholder="Ej: 12345678"
+                               label="Número de ULTIMATIX"
+                               full-width="true"
+                               max-length=8
+                               filter-regex="[^0-9]"
+              ></pichincha-input>
+
+              <div class="errors"
+                   *ngIf="ultimatix?.invalid && (ultimatix?.dirty || ultimatix?.touched)">
+                <pichincha-typography
+                  class="text-error"
+                  *ngIf="!!ultimatix?.errors?.['pattern']"
+                  variant="tinyText"
+                  color="error"
+                  weight="normal"
+                  weight_color="500"
+                  align="inherit"
+                >
+                  Debe ingresar solo caracteres numéricos.
+                </pichincha-typography>
+                <pichincha-typography
+                  class="text-error"
+                  *ngIf="!!ultimatix?.errors?.['maxlength']"
+                  variant="tinyText"
+                  color="error"
+                  weight="normal"
+                  weight_color="500"
+                  align="inherit"
+                >
+                  Debe ingresar máximo 8 caracteres.
+                </pichincha-typography>
+                <pichincha-typography
+                  class="text-error"
+                  *ngIf="!!ultimatix?.errors?.['validateUltimatix']"
+                  variant="tinyText"
+                  color="error"
+                  weight="normal"
+                  weight_color="500"
+                  align="inherit"
+                >
+                  {{ultimatix?.errors?.['validateUltimatix']}}
+                </pichincha-typography>
+              </div>
+            </div>
+            <div class="col-md col-form text-truncate">
+              <pichincha-input
+                id="inputbankEntryDate"
+                label=" Fecha de ingreso"
+                appInputAccessor
+                full-width="true"
+                formControlName="bankEntryDate"
+                type="date"
+                idElement="inputbankEntryDate">
+              </pichincha-input>
+
+              <div class="errors"
+                   *ngIf="bankEntryDate?.invalid && (bankEntryDate?.dirty || bankEntryDate?.touched)">
+                <pichincha-typography
+                  class="text-error"
+                  *ngIf="!!bankEntryDate?.errors?.['ValidateDate']"
+                  variant="tinyText"
+                  color="error"
+                  weight="normal"
+                  weight_color="500"
+                  align="inherit"
+                >
+                  La fecha no puede ser mayor que la actual.
+                </pichincha-typography>
+              </div>
+            </div>
+          </div>
+          <!--#endregion-->
+
+        </section>
+        <!--#endregion-->
+
+        <!--#region Habilidades -->
+        <section class="row m-0 flex-column ">
+          <pichincha-typography class="col mt-4"
+                                variant="h4"
+                                color="darkGrey"
+                                weight="normal"
+                                weight_color="500"
+                                align="inherit">
+            Habilidades
+          </pichincha-typography>
+          <hr>
+          <pichincha-typography class="col mb-3"
+                                variant="smallText"
+                                *ngIf=" skills.touched && skills.invalid"
+                                color="error"
+                                weight="normal"
+                                weight_color="500"
+                                align="inherit">
+            Debe seleccionar al menos una habilidad
+          </pichincha-typography>
+
+          <app-person-skills [profile]="$any(profileTo.value)"
+                             [personSkills]="personSkills$ | async"
+                             class="container"
+                             (changeSkills)="setSkills($event)"
+          ></app-person-skills>
+
+        </section>
+
+        <!--#endregion-->
+
+        <div class="row m-0 mt-4">
+          <div class="col d-flex gap-10">
+            <button type="reset"
+                    class="btn-pichincha md-secondary sz-large">
+              Cancelar
+            </button>
+            <button class="btn-pichincha md-primary sz-large">
+              Guardar
+            </button>
+          </div>
+        </div>
+
+      </form>
+    </ng-container>
+
+  </section>
+</div>
+
+

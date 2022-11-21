@@ -1,0 +1,47 @@
+<div class="row no-gutters justify-content-center">
+  <section class="container container-template">
+
+  <!--#region Table-->
+  <ng-container *ngIf="(data$ | async) as table ; else elseError">
+
+    <app-table [headers]="tableHeaders"
+               [rows]="table"
+               keyExpr="id"
+               [allActions]="true"
+               (onEditingStart)="onClickEdit($event.rowData)"
+               (onDeleteStart)="onDeleteTable($event)">
+      <div class="toolbar-right">
+        <pichincha-button (click)="onClickEdit()"
+                          class="w-100"
+                          size="large"
+                          id="button"
+                          color="primary">
+          <pichincha-icon class="mr-2"
+                          size="20px"
+                          color="error"
+                          weight_color="900"
+                          type="--outlined">
+            add
+          </pichincha-icon>
+          Agregar nueva tribu
+        </pichincha-button>
+      </div>
+    </app-table>
+
+  </ng-container>
+  <!--#endregion-->
+
+  <!--#region Else error table-->
+  <ng-template #elseError>
+    <div class="d-flex align-items-center justify-content-center mt-3">
+      <app-error [controlSpiner]="showSpinner">
+      </app-error>
+    </div>
+  </ng-template>
+  <!--#endregion-->
+
+  </section>
+</div>
+
+
+

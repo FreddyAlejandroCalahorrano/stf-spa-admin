@@ -1,0 +1,48 @@
+@import "./src/styles/ds";
+@import "./src/assets/modal";
+@import "./src/assets/table";
+
+
+.allButFooter {
+  min-height: calc(100vh - 56px);
+}
+
+.container-template {
+  //width: 800px;
+  padding: 30px 40px !important;
+  background-color: #ffffff;
+  border-radius: 4px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0 6px 24px 0, rgba(0, 0, 0, 0.08) 0 0 0 1px;
+}
+
+
+.home {
+  position: absolute;
+  top: 0;
+  left: 250px;
+  height: 100vh;
+  width: calc(100% - 250px);
+  transition: all 0.3s ease;
+}
+
+.nav-close.home {
+  left: 88px;
+  height: 100vh;
+  width: calc(100% - 88px);
+  transition: all 0.3s ease;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.xng-breadcrumb-root {
+  padding: 8px 16px;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.xng-breadcrumb-trail {
+  margin-top: 8px;
+}
+

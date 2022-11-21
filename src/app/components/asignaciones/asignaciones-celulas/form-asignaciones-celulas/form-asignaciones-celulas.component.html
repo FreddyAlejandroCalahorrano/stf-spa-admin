@@ -1,0 +1,209 @@
+<div class="row no-gutters ">
+  <section class="section-form container container-template d-flex justify-content-center">
+    <form id="userForm"
+          *ngIf="personCelulaFormGroup"
+          [formGroup]="personCelulaFormGroup">
+
+      <pichincha-typography class="mb-4 mt-3"
+                            variant="h4"
+                            color="blue"
+                            weight="normal"
+                            weight_color="500"
+                            align="inherit">
+        Asignación de persona a célula
+      </pichincha-typography>
+
+
+      <ng-container *ngIf="(listTribu$ | async) as Tribu">
+
+        <!--#region Tribu -->
+        <app-p-select formControlName="tribuName"
+                      [items]="Tribu"
+                      valueExpr="id"
+                      displayExpr="tribuName"
+                      [search]="true"
+                      [state]="$any(tribuName.touched && tribuName.invalid? 'error': (isEdit ? 'disabled' : 'normal'))  "
+                      [errorHelper]="'La tribu es requerida'"
+                      label="Seleccione una tribu *"
+        ></app-p-select>
+        <!--#endregion-->
+
+        <!--#region celula-->
+        <app-p-select formControlName="celulaName"
+                      [items]="listCelulas"
+                      valueExpr="id"
+                      displayExpr="celulaNameProduct"
+                      label="Seleccione una célula *"
+                      [state]="$any(celulaName.touched && celulaName.invalid? 'error': (isEdit ? 'disabled' : 'normal'))  "
+                      [errorHelper]="'La célula es requerida.'"
+        ></app-p-select>
+        <!--#endregion-->
+
+      </ng-container>
+
+      <!--#region person-->
+      <app-custom-input id="celulaSearchButton"
+                        type="text"
+                        ngDefaultControl
+                        formControlName="personCelula"
+                        placeholder="Buscar"
+                        label="Nombre de la persona *"
+                        [showSearchButton]="true"
+                        [state]="isEdit? 'disabled':'normal'"
+                        (clickButton)="onSearchStaffPersonClick()">
+      </app-custom-input>
+      <div *ngIf="personCelula?.invalid && (personCelula?.dirty || personCelula?.touched)">
+        <pichincha-typography
+          class="text-error"
+          *ngIf="!!personCelula?.errors?.['required']"
+          variant="tinyText"
+          color="error"
+          weight="normal"
+          weight_color="500"
+          align="inherit">
+          La persona es requerida.
+        </pichincha-typography>
+      </div>
+      <!--#endregion-->
+
+      <!--#region staff-->
+      <section class="mt-3">
+        <div class="row">
+          <app-custom-input class="col"
+                            label="Fecha de ingreso *"
+                            type="date"
+                            ngDefaultControl
+                            formControlName="assignmentStartDate"
+                            [fullWidth]="true"
+                            [errorHelper]="assignmentStartDate.touched && assignmentStartDate.invalid? 'Fecha de ingreso requerida':''"
+          ></app-custom-input>
+
+          <app-custom-input class="col"
+                            label="Posible fecha de salida *"
+                            type="date"
+                            ngDefaultControl
+                            formControlName="tentativeAssignmentEndDate"
+                            [fullWidth]="true"
+                            [errorHelper]="errorTentativeAssignmentEndDate"
+          ></app-custom-input>
+
+        </div>
+        <div class="row mt-3">
+          <app-custom-input class="col"
+                            label="Porcentaje de asignación *"
+                            placeholder="Ej. 25"
+                            ngDefaultControl
+                            [filterRegex]="'[^0-9]'"
+                            [maxLength]="3"
+                            formControlName="allocationPercentage"
+                            [fullWidth]="true"
+                            [errorHelper]="errorAllocationPercentage"
+          ></app-custom-input>
+        </div>
+        <div class="row mt-3">
+          <pichincha-input label="Observaciones"
+                           id="inputObservation"
+                           class="col"
+                           type="text"
+                           full-width="true"
+                           ngDefaultControl
+                           formControlName="observation"
+                           full-width="true"
+                           type="text"
+                           idElement="inputObservation"
+                           max-length=256
+          ></pichincha-input>
+        </div>
+      </section>
+      <!--#endregion-->
+
+      <!--#region observation-->
+
+      <!--#endregion-->
+
+      <!--#region allocationPercentage notification-->
+      <div *ngIf="(personCelulaPercentageList$ | async) && totalPercentage !== 0"
+           class="list-group mt-3">
+        <div class="list-group-item d-flex justify-content-between align-items-center">
+          <pichincha-typography id="celulaNameNotification"
+                                variant="smallText"
+                                color="blue"
+                                weight="normal"
+                                weight_color="500"
+                                align="inherit">
+            Porcentaje actual del recurso
+          </pichincha-typography>
+        </div>
+        <div class="scrollContainer">
+          <div *ngFor="let personCelulaPercentage of personCelulaPercentageList$ | async"
+               class="list-group-item d-flex justify-content-between align-items-center">
+            <pichincha-typography id="celulaNameNotification"
+                                  variant="smallText"
+                                  color="darkGrey"
+                                  weight="normal"
+                                  weight_color="500"
+                                  align="inherit">
+              {{personCelulaPercentage.celula}}
+            </pichincha-typography>
+            <pichincha-typography id="percentageNotification"
+                                  variant="smallText"
+                                  color="darkGrey"
+                                  weight="normal"
+                                  weight_color="500"
+                                  align="inherit">
+              {{personCelulaPercentage.allocationPercentage / 100 | percent}}
+            </pichincha-typography>
+          </div>
+        </div>
+        <div class="list-group-item d-flex justify-content-between align-items-center">
+          <pichincha-typography id="totalNotification"
+                                variant="smallText"
+                                color="darkGrey"
+                                weight="normal"
+                                weight_color="700"
+                                align="inherit">
+            Total
+          </pichincha-typography>
+          <pichincha-typography id="totalPercentageNotification"
+                                variant="smallText"
+                                color="darkGrey"
+                                weight="normal"
+                                weight_color="700"
+                                align="inherit">
+            {{totalPercentage / 100 | percent}}
+          </pichincha-typography>
+        </div>
+      </div>
+      <!--#endregion -->
+
+      <section *ngIf="tentativeAssignmentEndDate.touched && personCelulaFormGroup.invalid">
+        <hr>
+        <pichincha-typography class="text-error"
+                              *ngIf="personCelulaFormGroup?.errors?.['fromToDate']"
+                              variant="tinyText"
+                              color="error"
+                              weight="normal"
+                              weight_color="500"
+                              align="inherit">
+          La fecha de finalización debe ser mayor a la fecha de ingreso.
+        </pichincha-typography>
+      </section>
+
+      <div class="w-100 d-flex justify-content-end" style="margin-top: 20px; gap: 10px">
+        <button class="btn-pichincha md-secondary sz-large"
+                style="width: 150px"
+                type="button"
+                backButton>
+          Cancelar
+        </button>
+
+        <pichincha-button style="width: 150px"
+                          size="large"
+                          (clickbutton)="onSubmit()"
+                          color="primary">
+          Aceptar
+        </pichincha-button>
+      </div>
+    </form>
+  </section>
+</div>

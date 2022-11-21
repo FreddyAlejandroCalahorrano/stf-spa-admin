@@ -1,0 +1,102 @@
+<div class="row no-gutters ">
+  <section class="section-form container container-template d-flex justify-content-center">
+
+    <form id="userForm"
+          [formGroup]="personTribuFormGroup"
+          (ngSubmit)="onSubmit()">
+
+      <pichincha-typography class="mb-4 mt-3"
+                            variant="h4"
+                            color="blue"
+                            weight="normal"
+                            weight_color="500"
+                            align="inherit">
+        Asignación de líderes a tribus
+      </pichincha-typography>
+
+      <!--#region tribu-->
+      <app-p-select label="Tribu *"
+                    formControlName="tribuName"
+                    [items]="tribus"
+                    [search]="true"
+                    valueExpr="id"
+                    displayExpr="tribuName"
+                    errorHelper="La tribu es requerida"
+                    [state]="$any(tribuName.touched && tribuName.invalid? 'error' : (isEdit? 'disabled' : 'normal'))"
+      ></app-p-select>
+      <!--#endregion-->
+
+      <!--#region person-->
+      <app-custom-input id="tribuSearchButton"
+                        type="text"
+                        ngDefaultControl
+                        formControlName="personName"
+                        placeholder="Buscar"
+                        label="Nombre del líder *"
+                        [showSearchButton]="true"
+                        [state]="isEdit? 'disabled':'normal'"
+                        (clickButton)="onSearchLiderPersonClick()"
+                        [errorHelper]="'La persona es requerida.'"
+      ></app-custom-input>
+      <!--#endregion-->
+
+      <!--#region tipo rol-->
+      <div style="margin-top: 20px">
+        <app-p-select label="Tipo de rol de líder *"
+                      formControlName="typeRoleLeader"
+                      [items]="tipoRol"
+                      valueExpr="rolName"
+                      displayExpr="rolName"
+                      errorHelper="El tipo de rol del líder es requerido"
+                      [state]="$any(typeRoleLeader.touched && typeRoleLeader.invalid? 'error' : (isEdit? 'disabled' : 'normal'))"
+        ></app-p-select>
+      </div>
+      <!--#endregion-->
+
+      <!--#region fecha-ingreso-->
+      <pichincha-input id="assignmentStartDate"
+                       label="Fecha de ingreso"
+                       ngDefaultControl
+                       full-width="true"
+                       formControlName="assignmentStartDate"
+                       type="date"
+                       idElement="assignmentStartDate">
+      </pichincha-input>
+      <!--#endregion-->
+
+      <!--#region observation-->
+      <div id="observation" class="mt-4">
+        <pichincha-input label="Observaciones"
+                         id="inputObservation"
+                         type="text"
+                         full-width="true"
+                         ngDefaultControl
+                         formControlName="observation"
+                         full-width="true"
+                         type="text"
+                         idElement="inputObservation"
+                         max-length=256
+        ></pichincha-input>
+      </div>
+      <!--#endregion-->
+
+      <div class="w-100 d-flex justify-content-end mt-3 gap-10">
+        <button class="btn-pichincha md-secondary sz-large"
+                style="width: 150px"
+                type="button"
+                backButton>
+          Cancelar
+        </button>
+
+        <button class="btn-pichincha md-primary sz-large"
+                style="width: 150px"
+                type="submit">
+          Aceptar
+        </button>
+
+      </div>
+
+    </form>
+
+  </section>
+</div>

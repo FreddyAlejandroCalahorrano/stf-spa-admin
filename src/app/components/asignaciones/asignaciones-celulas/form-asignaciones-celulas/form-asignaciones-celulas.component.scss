@@ -1,0 +1,20 @@
+.section-form {
+  width: 600px !important;
+
+  #userForm {
+    div.row {
+      margin-bottom: 15px !important;
+    }
+  }
+}
+
+
+.scrollContainer {
+  overflow-y: scroll;
+  max-height: 160px;
+  margin: -1px 0;
+}
+
+.scrollContainer::-webkit-scrollbar {
+  display: none;
+}
